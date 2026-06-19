@@ -91,7 +91,7 @@
         .typing-cursor::after { content: '▋'; animation: blink 1s infinite; color: var(--accent); }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* EINGABEFELD - JETZT IMMER SICHTBAR */
+        /* EINGABEFELD */
         #input-area { padding: 20px; border-top: 1px solid var(--border); position: relative; background: var(--bg); flex-shrink: 0; }
         #prompt-form { max-width: 800px; margin: 0 auto; position: relative; }
         .ghost-wrapper { position: relative; width: 100%; }
@@ -105,6 +105,26 @@
         .toast { padding: 12px 20px; border-radius: 8px; color: white; font-size: 14px; margin-bottom: 10px; }
         .toast.error { background: var(--danger); }
         .toast.success { background: var(--accent); }
+
+        /* NEUE FEATURES STYLES */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: var(--sidebar); padding: 30px; border-radius: 16px; width: 400px; border: 1px solid var(--border); position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text); }
+        .modal-body label { display: block; margin: 15px 0 5px; font-size: 14px; font-weight: 600; }
+        .modal-body input[type="text"], .modal-body input[type="color"] { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; margin-bottom: 10px; }
+        .stats-grid { display: flex; gap: 15px; margin: 20px 0; }
+        .stat-card { flex: 1; background: var(--bg); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid var(--border); }
+        .stat-number { display: block; font-size: 24px; font-weight: bold; color: var(--accent); }
+        .stat-label { font-size: 12px; color: #888; }
+
+        .search-input { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; margin-bottom: 10px; font-size: 14px; }
+
+        .icon-btn { background: var(--chat-bubble); border: 1px solid var(--border); color: var(--text); border-radius: 8px; cursor: pointer; width: 40px; height: 40px; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .icon-btn:hover { background: var(--accent); color: white; }
+
+        .msg-actions { display: flex; gap: 5px; margin-top: 10px; }
+        .action-btn { background: transparent; border: 1px solid var(--border); color: #888; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+        .action-btn:hover { color: var(--accent); border-color: var(--accent); }
     </style>
 </head>
 <body>
@@ -121,6 +141,34 @@
         </div>
     </div>
 
+    <!-- PROFILE MODAL -->
+    <div id="profile-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Mein Profil</h2>
+            <div class="modal-body">
+                <label>Anzeigename</label>
+                <input type="text" id="profile-name-input" placeholder="Dein Name">
+                
+                <label>Avatar Farbe</label>
+                <input type="color" id="profile-color-input" value="#5436DA">
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="stat-chats">0</span>
+                        <span class="stat-label">Chats</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="stat-messages">0</span>
+                        <span class="stat-label">Nachrichten</span>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" id="save-profile-btn">Speichern</button>
+            </div>
+        </div>
+    </div>
+
     <!-- APP SCREEN -->
     <div id="app-screen" class="hidden">
         <div id="sidebar">
@@ -129,12 +177,11 @@
                 <button id="settings-btn">⚙️</button>
             </div>
             
-            <!-- Chat Listen Ansicht -->
             <div id="chat-view" class="sidebar-view">
+                <input type="text" id="search-chats" placeholder="Chats durchsuchen..." class="search-input">
                 <div id="chat-list"></div>
             </div>
 
-            <!-- Einstellungs Ansicht (in der Sidebar) -->
             <div id="settings-view" class="sidebar-view hidden">
                 <button class="back-btn" id="back-btn">← Zurück zu Chats</button>
                 
@@ -180,6 +227,7 @@
         
         <div id="main">
             <div id="header">
+                <button id="profile-btn" class="icon-btn" title="Profil">👤</button>
                 <div class="model-group">
                     <label data-i18n="model1">KI 1:</label>
                     <select id="model-selector"></select>
@@ -187,6 +235,10 @@
                 <div class="model-group hidden" id="group-2-container">
                     <label data-i18n="model2">KI 2:</label>
                     <select id="model-selector-2"></select>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <button id="export-btn" class="icon-btn" title="Chat exportieren">⬇️</button>
+                    <button id="clear-chat-btn" class="icon-btn" title="Chat leeren">🗑️</button>
                 </div>
             </div>
             
@@ -246,7 +298,7 @@
             { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro" }, { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash" }, { id: "gemini-pro", name: "Gemini Pro" }
         ];
 
-        // --- I18N (Übersetzungen) ---
+        // --- I18N ---
         const i18n = {
             de: { welcome: "Willkommen zurück", email: "E-Mail", password: "Passwort", login: "Einloggen", register: "Neuen Account erstellen", newChat: "+ Neuer Chat", logout: "Abmelden", model1: "KI 1:", model2: "KI 2:", welcomeMsg: "Willkommen! Klic auf 'Neuer Chat'.", language: "Sprache", theme: "Design", groupChat: "Gruppen-Chat (2 KIs)", autocomplete: "Auto-Vervollständigung" },
             en: { welcome: "Welcome back", email: "Email", password: "Password", login: "Login", register: "Create new Account", newChat: "+ New Chat", logout: "Logout", model1: "AI 1:", model2: "AI 2:", welcomeMsg: "Welcome! Click 'New Chat' to start.", language: "Language", theme: "Theme", groupChat: "Group Chat (2 AIs)", autocomplete: "Auto-Complete" }
@@ -255,6 +307,14 @@
         let currentLang = localStorage.getItem('lang') || 'de';
         let isGroupChat = localStorage.getItem('groupChat') === 'true';
         let isAutocomplete = localStorage.getItem('autocomplete') !== 'false';
+        
+        // --- PROFILE DATA ---
+        let profileData = JSON.parse(localStorage.getItem('profileData')) || {
+            displayName: 'User',
+            avatarColor: '#5436DA',
+            totalMessages: 0,
+            totalChats: 0
+        };
 
         // --- DOM Elements ---
         const authScreen = document.getElementById('auth-screen');
@@ -275,7 +335,6 @@
         let autocompleteTimeout = null;
         let currentGhostText = '';
 
-        // Init Models
         MODELS.forEach(m => {
             const opt1 = document.createElement('option'); opt1.value = m.id; opt1.innerText = m.name; modelSelector.appendChild(opt1);
             const opt2 = document.createElement('option'); opt2.value = m.id; opt2.innerText = m.name; modelSelector2.appendChild(opt2);
@@ -284,7 +343,6 @@
 
         marked.setOptions({ breaks: true, gfm: true });
 
-        // --- UI UPDATES ---
         function applyLanguage() {
             document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = i18n[currentLang][el.dataset.i18n]; });
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = i18n[currentLang][el.dataset.i18nPlaceholder]; });
@@ -297,7 +355,6 @@
         applyLanguage();
         document.getElementById('group-2-container').style.display = isGroupChat ? 'flex' : 'none';
 
-        // Event Listeners for Settings Sidebar
         document.getElementById('settings-btn').onclick = () => { chatView.classList.add('hidden'); settingsView.classList.remove('hidden'); };
         document.getElementById('back-btn').onclick = () => { settingsView.classList.add('hidden'); chatView.classList.remove('hidden'); };
         
@@ -305,6 +362,70 @@
         document.getElementById('theme-select').onchange = (e) => applyTheme(e.target.value);
         document.getElementById('group-chat-toggle').onchange = (e) => { isGroupChat = e.target.checked; localStorage.setItem('groupChat', isGroupChat); document.getElementById('group-2-container').style.display = isGroupChat ? 'flex' : 'none'; };
         document.getElementById('autocomplete-toggle').onchange = (e) => { isAutocomplete = e.target.checked; localStorage.setItem('autocomplete', isAutocomplete); if(!isAutocomplete) ghostPrompt.innerText = ''; };
+
+        // --- PROFILE LOGIC ---
+        function openProfileModal() {
+            document.getElementById('profile-modal').classList.remove('hidden');
+            document.getElementById('profile-name-input').value = profileData.displayName;
+            document.getElementById('profile-color-input').value = profileData.avatarColor;
+            updateProfileStats();
+        }
+        function saveProfile() {
+            profileData.displayName = document.getElementById('profile-name-input').value || 'User';
+            profileData.avatarColor = document.getElementById('profile-color-input').value;
+            localStorage.setItem('profileData', JSON.stringify(profileData));
+            updateUserAvatar();
+            closeProfileModal();
+            showToast('Profil gespeichert!', 'success');
+        }
+        function closeProfileModal() { document.getElementById('profile-modal').classList.add('hidden'); }
+        function updateProfileStats() {
+            document.getElementById('stat-chats').innerText = profileData.totalChats;
+            document.getElementById('stat-messages').innerText = profileData.totalMessages;
+        }
+        function updateUserAvatar() {
+            document.querySelectorAll('.user-avatar').forEach(el => {
+                el.style.background = profileData.avatarColor;
+                el.innerText = profileData.displayName.charAt(0).toUpperCase();
+            });
+        }
+        document.getElementById('profile-btn').onclick = openProfileModal;
+        document.querySelector('.close-modal').onclick = closeProfileModal;
+        document.getElementById('save-profile-btn').onclick = saveProfile;
+
+        // --- SEARCH LOGIC ---
+        document.getElementById('search-chats').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('#chat-list .chat-item').forEach(item => {
+                const title = item.querySelector('span').innerText.toLowerCase();
+                item.style.display = title.includes(term) ? 'flex' : 'none';
+            });
+        });
+
+        // --- EXPORT & CLEAR LOGIC ---
+        document.getElementById('export-btn').onclick = () => {
+            if (!currentChatId || currentMessages.length === 0) { showToast('Kein Chat zum Exportieren!', 'error'); return; }
+            let markdown = `# Chat Export\n\n`;
+            currentMessages.forEach(m => {
+                const author = m.role === 'user' ? profileData.displayName : 'KI';
+                markdown += `## ${author}\n${m.content}\n\n---\n\n`;
+            });
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = `chat-${currentChatId}.md`; a.click();
+            URL.revokeObjectURL(url);
+            showToast('Chat exportiert!', 'success');
+        };
+
+        document.getElementById('clear-chat-btn').onclick = async () => {
+            if (!currentChatId) return;
+            if (!confirm('Wirklich alle Nachrichten in diesem Chat löschen?')) return;
+            currentMessages = [];
+            messagesDiv.innerHTML = '';
+            const chatRef = doc(db, "chats", currentChatId);
+            await setDoc(chatRef, { messages: [] }, { merge: true });
+            showToast('Chat geleert!', 'success');
+        };
 
         // --- TOAST ---
         function showToast(msg, type = 'error') {
@@ -328,6 +449,7 @@
                 appScreen.style.display = 'flex';
                 document.getElementById('user-email').innerText = user.email;
                 listenToChats(user.uid);
+                updateUserAvatar();
             } else {
                 authScreen.classList.remove('hidden');
                 authScreen.style.display = 'flex';
@@ -370,19 +492,52 @@
             const user = auth.currentUser; if (!user) return;
             const docRef = await addDoc(collection(db, "chats"), { title: "Neuer Chat", userId: user.uid, model: modelSelector.value, messages: [], createdAt: serverTimestamp() });
             currentChatId = docRef.id; currentMessages = []; messagesDiv.innerHTML = '';
+            profileData.totalChats++;
+            localStorage.setItem('profileData', JSON.stringify(profileData));
         };
+
+        function addMessageActions(msgDiv, content) {
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'msg-actions';
+            
+            const regenBtn = document.createElement('button');
+            regenBtn.className = 'action-btn';
+            regenBtn.innerHTML = '🔄 Neu generieren';
+            regenBtn.onclick = () => regenerateResponse();
+            actionsDiv.appendChild(regenBtn);
+
+            const copyMsgBtn = document.createElement('button');
+            copyMsgBtn.className = 'action-btn';
+            copyMsgBtn.innerHTML = '📋 Kopieren';
+            copyMsgBtn.onclick = () => {
+                navigator.clipboard.writeText(content);
+                copyMsgBtn.innerHTML = '✅ Kopiert!';
+                setTimeout(() => copyMsgBtn.innerHTML = '📋 Kopieren', 1500);
+            };
+            actionsDiv.appendChild(copyMsgBtn);
+            
+            msgDiv.parentNode.appendChild(actionsDiv);
+        }
 
         function addMessageUI(role, content, modelId = null, isStreaming = false) {
             const container = document.createElement('div'); container.className = 'msg-container';
             const avatar = document.createElement('div');
             
             let avatarClass = 'user-avatar'; let avatarText = 'U';
-            if (role === 'assistant') {
+            if (role === 'user') {
+                avatarText = profileData.displayName.charAt(0).toUpperCase();
+                avatar.style.background = profileData.avatarColor;
+            } else {
                 avatarClass = (modelId && modelId === modelSelector2.value) ? 'ai-avatar-2' : 'ai-avatar';
                 avatarText = (modelId && modelId === modelSelector2.value) ? 'B' : 'A';
             }
             avatar.className = `msg-avatar ${avatarClass}`; avatar.innerText = avatarText;
             
+            const wrapper = document.createElement('div');
+            wrapper.style.flexGrow = '1';
+            wrapper.style.display = 'flex';
+            wrapper.style.flexDirection = 'column';
+
             const msgDiv = document.createElement('div'); msgDiv.className = 'msg-content';
             if (isStreaming) msgDiv.classList.add('typing-cursor');
             msgDiv.innerHTML = role === 'user' ? content : DOMPurify.sanitize(marked.parse(content));
@@ -395,8 +550,14 @@
                     block.parentNode.appendChild(copyBtn);
                 });
             }
-            container.appendChild(avatar); container.appendChild(msgDiv);
-            messagesDiv.appendChild(container); messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            wrapper.appendChild(msgDiv);
+            if (role === 'assistant' && !isStreaming) addMessageActions(msgDiv, content);
+
+            container.appendChild(avatar); 
+            container.appendChild(wrapper);
+            messagesDiv.appendChild(container); 
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
             return msgDiv;
         }
 
@@ -453,6 +614,9 @@
             addMessageUI('user', promptText);
             const userMsg = { role: 'user', content: promptText };
             currentMessages.push(userMsg);
+            
+            profileData.totalMessages++;
+            localStorage.setItem('profileData', JSON.stringify(profileData));
 
             const model1 = modelSelector.value;
             const model2 = isGroupChat ? modelSelector2.value : null;
@@ -467,6 +631,7 @@
                 ai1Div.innerHTML = DOMPurify.sanitize(marked.parse(res1));
                 ai1Div.classList.remove('typing-cursor');
                 ai1Div.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
+                addMessageActions(ai1Div, res1);
                 currentMessages.push({ role: 'assistant', content: res1, model: model1 });
                 chatHistoryForAI2.push({ role: 'assistant', content: res1 });
 
@@ -479,6 +644,7 @@
                     ai2Div.innerHTML = DOMPurify.sanitize(marked.parse(res2));
                     ai2Div.classList.remove('typing-cursor');
                     ai2Div.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
+                    addMessageActions(ai2Div, res2);
                     currentMessages.push({ role: 'assistant', content: res2, model: model2 });
                 }
 
@@ -496,6 +662,67 @@
             }
         });
 
+        // --- REGENERATE LOGIC ---
+        async function regenerateResponse() {
+            if (isGenerating) return;
+            let lastUserMsgIndex = -1;
+            for (let i = currentMessages.length - 1; i >= 0; i--) {
+                if (currentMessages[i].role === 'user') { lastUserMsgIndex = i; break; }
+            }
+            if (lastUserMsgIndex === -1) return;
+            
+            if (currentMessages[currentMessages.length - 1].role === 'assistant') {
+                currentMessages.pop();
+                const containers = messagesDiv.querySelectorAll('.msg-container');
+                if (containers.length > 0) containers[containers.length - 1].remove();
+                if (isGroupChat && currentMessages[currentMessages.length - 1].role === 'assistant') {
+                    currentMessages.pop();
+                    const containers2 = messagesDiv.querySelectorAll('.msg-container');
+                    if (containers2.length > 0) containers2[containers2.length - 1].remove();
+                }
+            }
+            
+            isGenerating = true;
+            const model1 = modelSelector.value;
+            const model2 = isGroupChat ? modelSelector2.value : null;
+            let chatHistoryForAI2 = [...currentMessages];
+
+            try {
+                const ai1Div = addMessageUI('assistant', '', model1, true);
+                const res1 = await streamApiCall(model1, currentMessages, (chunk) => {
+                    ai1Div.innerHTML = DOMPurify.sanitize(marked.parse(chunk));
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                });
+                ai1Div.innerHTML = DOMPurify.sanitize(marked.parse(res1));
+                ai1Div.classList.remove('typing-cursor');
+                ai1Div.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
+                addMessageActions(ai1Div, res1);
+                currentMessages.push({ role: 'assistant', content: res1, model: model1 });
+                chatHistoryForAI2.push({ role: 'assistant', content: res1 });
+
+                if (model2) {
+                    const ai2Div = addMessageUI('assistant', '', model2, true);
+                    const res2 = await streamApiCall(model2, chatHistoryForAI2, (chunk) => {
+                        ai2Div.innerHTML = DOMPurify.sanitize(marked.parse(chunk));
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    });
+                    ai2Div.innerHTML = DOMPurify.sanitize(marked.parse(res2));
+                    ai2Div.classList.remove('typing-cursor');
+                    ai2Div.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
+                    addMessageActions(ai2Div, res2);
+                    currentMessages.push({ role: 'assistant', content: res2, model: model2 });
+                }
+
+                const chatRef = doc(db, "chats", currentChatId);
+                await setDoc(chatRef, { messages: currentMessages }, { merge: true });
+            } catch (error) {
+                showToast("Fehler beim Neu generieren: " + error.message);
+            } finally {
+                isGenerating = false;
+            }
+        }
+
+        // --- API CALLS ---
         async function streamApiCall(model, messages, onChunk) {
             if (model.startsWith('gemini')) return streamGemini(model, messages, onChunk);
             else if (model.startsWith('deepseek')) return streamOpenAICompatible("https://api.deepseek.com/v1/chat/completions", API_KEYS.deepseek, model, messages, onChunk);

@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LobiBrot AI - Professional Beta</title>
+    <title>LobiBrot AI - Ultimate Hub</title>
     
-    <!-- Markdown & Syntax Highlighting -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -15,73 +14,98 @@
         :root { 
             --bg: #0f0f0f; --sidebar: #171717; --chat-bg: #0f0f0f; --chat-bubble: #1e1e1e; 
             --input: #1e1e1e; --text: #ececec; --accent: #10a37f; --border: #2a2a2a; --danger: #ef4146; 
+            --ghost-text: #555;
+        }
+        [data-theme="light"] { 
+            --bg: #f9f9f9; --sidebar: #ffffff; --chat-bg: #f9f9f9; --chat-bubble: #f0f0f0; 
+            --input: #ffffff; --text: #1a1a1a; --accent: #10a37f; --border: #e0e0e0; --danger: #d33625;
+            --ghost-text: #aaa;
+        }
+        [data-theme="cyberpunk"] { 
+            --bg: #0a0a12; --sidebar: #11111c; --chat-bg: #0a0a12; --chat-bubble: #16162a; 
+            --input: #16162a; --text: #00ff9f; --accent: #ff00ff; --border: #ff00ff; --danger: #ffff00;
+            --ghost-text: #ff00ff80;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         body { display: flex; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
         .hidden { display: none !important; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         /* AUTH */
         #auth-screen { display: flex; align-items: center; justify-content: center; width: 100%; background: var(--bg); flex-direction: column; gap: 20px; }
         .auth-logo { font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
         .auth-box { background: var(--chat-bubble); padding: 40px; border-radius: 16px; width: 380px; border: 1px solid var(--border); }
-        .auth-box h2 { margin-bottom: 20px; text-align:center; font-weight: 600; }
-        .auth-box input { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white; font-size: 14px; transition: 0.2s; }
-        .auth-box input:focus { outline: none; border-color: var(--accent); }
-        .auth-box button { width: 100%; padding: 14px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; margin-bottom: 10px; transition: 0.2s; font-size: 14px; }
+        .auth-box h2 { margin-bottom: 20px; text-align:center; font-weight: 600; color: var(--text); }
+        .auth-box input { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; }
+        .auth-box button { width: 100%; padding: 14px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; margin-bottom: 10px; font-size: 14px; }
         .btn-primary { background: var(--accent); color: white; }
-        .btn-primary:hover { background: #0d8c6d; }
         .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
-        .btn-secondary:hover { background: var(--bg); }
 
         /* LAYOUT */
         #app-screen { display: flex; width: 100%; }
-        #sidebar { width: 280px; background: var(--sidebar); padding: 15px; display: flex; flex-direction: column; border-right: 1px solid var(--border); transition: transform 0.3s; }
-        #new-chat { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        #new-chat:hover { background: #0d8c6d; }
+        #sidebar { width: 280px; background: var(--sidebar); padding: 15px; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+        #sidebar-header { display: flex; gap: 10px; margin-bottom: 20px; }
+        #new-chat { flex-grow: 1; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        #settings-btn { background: var(--chat-bubble); border: 1px solid var(--border); color: var(--text); border-radius: 8px; cursor: pointer; width: 45px; font-size: 18px; }
         #chat-list { flex-grow: 1; overflow-y: auto; margin-bottom: 15px; }
-        .chat-item { padding: 12px; border-radius: 8px; cursor: pointer; margin-bottom: 5px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; color: #b0b0b0; transition: 0.2s; }
+        .chat-item { padding: 12px; border-radius: 8px; cursor: pointer; margin-bottom: 5px; font-size: 14px; display: flex; justify-content: space-between; color: #b0b0b0; }
         .chat-item:hover, .chat-item.active { background: var(--chat-bubble); color: var(--text); }
-        .chat-item .del-btn { opacity: 0; color: var(--danger); font-weight: bold; background: none; border: none; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        .del-btn { opacity: 0; color: var(--danger); background: none; border: none; cursor: pointer; font-size: 14px; }
         .chat-item:hover .del-btn { opacity: 1; }
-        #user-info { margin-top: auto; font-size: 13px; color: #888; padding-top: 15px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        #logout-btn { color: var(--danger); cursor: pointer; background: none; border: none; font-size: 13px; font-weight: 500; }
+        #user-info { margin-top: auto; font-size: 13px; color: #888; padding-top: 15px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; }
+        #logout-btn { color: var(--danger); cursor: pointer; background: none; border: none; font-size: 13px; }
 
-        #main { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg); position: relative; }
-        #header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; background: var(--bg); z-index: 10; }
-        select { background: var(--chat-bubble); color: white; border: 1px solid var(--border); padding: 10px 15px; border-radius: 8px; font-size: 14px; cursor: pointer; }
-        #messages { flex-grow: 1; overflow-y: auto; padding: 40px 20px; scroll-behavior: smooth; }
+        /* MAIN */
+        #main { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg); }
+        #header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .model-group { display: flex; align-items: center; gap: 5px; background: var(--chat-bubble); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border); }
+        .model-group label { font-size: 12px; color: #888; margin-right: 5px; }
+        select { background: transparent; color: var(--text); border: none; padding: 5px; font-size: 14px; cursor: pointer; }
+        select option { background: var(--chat-bubble); color: var(--text); }
+
+        #messages { flex-grow: 1; overflow-y: auto; padding: 40px 20px; }
         .msg-container { max-width: 800px; margin: 0 auto 30px; display: flex; gap: 15px; }
-        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; flex-shrink: 0; }
-        .user-avatar { background: #5436DA; color: white; }
-        .ai-avatar { background: var(--accent); color: white; }
-        .msg-content { flex-grow: 1; line-height: 1.6; font-size: 15px; }
-        .msg-content p { margin-bottom: 10px; }
+        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; flex-shrink: 0; color: white; }
+        .user-avatar { background: #5436DA; }
+        .ai-avatar { background: var(--accent); }
+        .ai-avatar-2 { background: #ff4400; } /* Zweite AI im Gruppenchat */
+        .msg-content { flex-grow: 1; line-height: 1.6; font-size: 15px; color: var(--text); }
         .msg-content pre { background: #0d0d0d; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 10px 0; border: 1px solid var(--border); position: relative; }
-        .msg-content code { font-family: 'Fira Code', monospace; font-size: 14px; }
-        .msg-content p > code { background: #2a2a2a; padding: 2px 6px; border-radius: 4px; color: #ff79c6; }
+        .msg-content code { font-family: 'Fira Code', monospace; font-size: 14px; color: #e0e0e0; }
+        .msg-content p > code { background: var(--chat-bubble); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
         .copy-code-btn { position: absolute; top: 8px; right: 8px; background: var(--bg); border: 1px solid var(--border); color: #aaa; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .copy-code-btn:hover { background: var(--chat-bubble); color: white; }
         .typing-cursor::after { content: '▋'; animation: blink 1s infinite; color: var(--accent); }
         @keyframes blink { 50% { opacity: 0; } }
 
-        #input-area { padding: 20px; background: var(--bg); border-top: 1px solid var(--border); }
+        /* INPUT AREA WITH AUTOCOMPLETE */
+        #input-area { padding: 20px; border-top: 1px solid var(--border); position: relative; }
         #prompt-form { max-width: 800px; margin: 0 auto; position: relative; }
-        #prompt { width: 100%; background: var(--input); border: 1px solid var(--border); color: white; padding: 15px 60px 15px 15px; border-radius: 12px; resize: none; height: 56px; max-height: 200px; font-size: 15px; line-height: 1.5; transition: 0.2s; }
+        .ghost-wrapper { position: relative; width: 100%; }
+        #ghost-prompt { position: absolute; top: 0; left: 0; width: 100%; height: 56px; padding: 15px 60px 15px 15px; border-radius: 12px; border: 1px solid transparent; color: var(--ghost-text); pointer-events: none; font-size: 15px; line-height: 1.5; white-space: pre-wrap; overflow: hidden; z-index: 1; background: transparent; }
+        #prompt { position: relative; width: 100%; background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 15px 60px 15px 15px; border-radius: 12px; resize: none; height: 56px; max-height: 200px; font-size: 15px; line-height: 1.5; z-index: 2; }
         #prompt:focus { outline: none; border-color: var(--accent); }
-        #send-btn { position: absolute; right: 10px; bottom: 10px; background: var(--accent); border: none; color: white; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        #send-btn:disabled { background: #444; cursor: not-allowed; }
+        #send-btn { position: absolute; right: 10px; bottom: 10px; background: var(--accent); border: none; color: white; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; z-index: 3; display: flex; align-items: center; justify-content: center; }
         #send-btn svg { width: 18px; height: 18px; fill: white; }
 
-        /* TOASTS */
-        #toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
-        .toast { padding: 12px 20px; border-radius: 8px; color: white; font-size: 14px; animation: slideIn 0.3s ease; }
+        /* SETTINGS MODAL */
+        #settings-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-box { background: var(--sidebar); padding: 30px; border-radius: 12px; width: 400px; border: 1px solid var(--border); }
+        .modal-box h2 { margin-bottom: 20px; color: var(--text); }
+        .setting-item { margin-bottom: 20px; }
+        .setting-item label { display: block; margin-bottom: 8px; font-size: 14px; color: #888; }
+        .setting-item select, .setting-item input { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 6px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 22px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        .modal-close { background: var(--chat-bubble); color: var(--text); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; }
+
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; }
+        .toast { padding: 12px 20px; border-radius: 8px; color: white; font-size: 14px; margin-bottom: 10px; }
         .toast.error { background: var(--danger); }
         .toast.success { background: var(--accent); }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -90,55 +114,108 @@
     <div id="auth-screen">
         <div class="auth-logo">LobiBrot AI</div>
         <div class="auth-box">
-            <h2>Willkommen zurück</h2>
-            <input type="email" id="auth-email" placeholder="E-Mail Adresse">
-            <input type="password" id="auth-password" placeholder="Passwort">
-            <button class="btn-primary" id="login-btn">Einloggen</button>
-            <button class="btn-secondary" id="register-btn">Neuen Account erstellen</button>
+            <h2 data-i18n="welcome">Willkommen zurück</h2>
+            <input type="email" id="auth-email" placeholder="E-Mail" data-i18n-placeholder="email">
+            <input type="password" id="auth-password" placeholder="Passwort" data-i18n-placeholder="password">
+            <button class="btn-primary" id="login-btn" data-i18n="login">Einloggen</button>
+            <button class="btn-secondary" id="register-btn" data-i18n="register">Neuen Account erstellen</button>
         </div>
     </div>
 
     <!-- APP SCREEN -->
     <div id="app-screen" class="hidden">
         <div id="sidebar">
-            <button id="new-chat">+ Neuer Chat</button>
+            <div id="sidebar-header">
+                <button id="new-chat" data-i18n="newChat">+ Neuer Chat</button>
+                <button id="settings-btn">⚙️</button>
+            </div>
             <div id="chat-list"></div>
             <div id="user-info">
                 <span id="user-email"></span>
-                <button id="logout-btn">Abmelden</button>
+                <button id="logout-btn" data-i18n="logout">Abmelden</button>
             </div>
         </div>
         <div id="main">
             <div id="header">
-                <select id="model-selector"></select>
-                <span style="color:#666; font-size:13px; margin-left:auto;">LobiBrot AI v3.0</span>
+                <div class="model-group">
+                    <label data-i18n="model1">KI 1:</label>
+                    <select id="model-selector"></select>
+                </div>
+                <div class="model-group" id="group-2-container">
+                    <label data-i18n="model2">KI 2:</label>
+                    <select id="model-selector-2"></select>
+                </div>
             </div>
             <div id="messages">
                 <div class="msg-container">
                     <div class="msg-avatar ai-avatar">L</div>
-                    <div class="msg-content">Willkommen bei LobiBrot AI! Wie kann ich dir heute helfen? Du kannst oben das KI-Modell wechseln.</div>
+                    <div class="msg-content" data-i18n="welcomeMsg">Willkommen! Klicke auf "Neuer Chat", um zu starten.</div>
                 </div>
             </div>
             <div id="input-area">
                 <form id="prompt-form">
-                    <textarea id="prompt" placeholder="Nachricht schreiben... (Enter zum Senden, Shift+Enter für neue Zeile)" rows="1" required></textarea>
-                    <button type="submit" id="send-btn" title="Senden">
-                        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
-                    </button>
+                    <div class="ghost-wrapper">
+                        <div id="ghost-prompt"></div>
+                        <textarea id="prompt" placeholder="Nachricht schreiben... (TAB für Auto-Vorschlag)" rows="1" required></textarea>
+                        <button type="submit" id="send-btn" title="Senden">
+                            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="hidden">
+        <div class="modal-box">
+            <h2 data-i18n="settings">Einstellungen</h2>
+            
+            <div class="setting-item">
+                <label data-i18n="language">Sprache</label>
+                <select id="lang-select">
+                    <option value="de">Deutsch</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <label data-i18n="theme">Design</label>
+                <select id="theme-select">
+                    <option value="dark">Dark Mode</option>
+                    <option value="light">Light Mode</option>
+                    <option value="cyberpunk">Cyberpunk</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <label data-i18n="groupChat">Gruppen-Chat mit 2 KIs</label>
+                <label class="switch">
+                    <input type="checkbox" id="group-chat-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <label data-i18n="autocomplete">Auto-Vervollständigung</label>
+                <label class="switch">
+                    <input type="checkbox" id="autocomplete-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="modal-close" id="modal-close-btn" data-i18n="close">Schließen</button>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
-    <!-- Firebase SDKs (v12.15.0) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, deleteDoc, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-        // --- FIREBASE KONFIGURATION (Deine Daten) ---
+        // --- FIREBASE KONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyChghSVtI1VoH7hbRXzOrGrG3e1QO3Ira4",
             authDomain: "lobibrot-ai.firebaseapp.com",
@@ -156,63 +233,88 @@
         const API_KEYS = {
             zai: "d3ea951dde414d4caf3448863886f1c1.fa3WMIABIZRCggcS",
             deepseek: "sk-f8f3a64c5c1945a1986c6038022e2154",
-            gemini: "AIzaSyC_IWZS6kz2xQ8_4u3l8hD9k4v5b6n7m8o" // HINWEIS: Dein Gemini Key von vorhin war "AQ.Ab8RN6J...". Falls der nicht geht, habe ich hier einen Standard-Testkey drin. Bitte deinen echten Gemini Key einsetzen, falls er abgelaufen ist.
+            gemini: "AQ.Ab8RN6Jcl4xXOeKazg2vRk28MARIAfdB4vVl9JFQokWxFXrlkQ"
         };
-        // Fallback auf deinen ursprünglichen Gemini Key
-        API_KEYS.gemini = "AQ.Ab8RN6Jcl4xXOeKazg2vRk28MARIAfdB4vVl9JFQokWxFXrlkQ"; 
 
         // --- 50+ MODELS ---
         const MODELS = [
-            { id: "deepseek-chat", name: "DeepSeek V3 (Chat)" }, { id: "deepseek-reasoner", name: "DeepSeek R1 (Reasoner)" }, { id: "deepseek-coder", name: "DeepSeek Coder" }, { id: "deepseek-v2.5", name: "DeepSeek V2.5" }, { id: "deepseek-math", name: "DeepSeek Math" },
-            { id: "glm-4-plus", name: "Z AI - GLM-4 Plus" }, { id: "glm-4", name: "Z AI - GLM-4" }, { id: "glm-4-air", name: "Z AI - GLM-4 Air" }, { id: "glm-4-flash", name: "Z AI - GLM-4 Flash (Kostenlos)" }, { id: "glm-4v", name: "Z AI - GLM-4V" }, { id: "glm-3-turbo", name: "Z AI - GLM-3 Turbo" }, { id: "codegeex-4", name: "Z AI - CodeGeeX-4" },
-            { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro" }, { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash" }, { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash" }, { id: "gemini-2.0-flash-exp", name: "Gemini 2.0 Flash (Exp)" }, { id: "gemini-pro", name: "Gemini Pro" }
+            { id: "deepseek-chat", name: "DeepSeek V3" }, { id: "deepseek-reasoner", name: "DeepSeek R1" }, { id: "deepseek-coder", name: "DeepSeek Coder" },
+            { id: "glm-4-plus", name: "Z AI - GLM-4 Plus" }, { id: "glm-4", name: "Z AI - GLM-4" }, { id: "glm-4-flash", name: "Z AI - GLM-4 Flash (Free)" },
+            { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro" }, { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash" }, { id: "gemini-pro", name: "Gemini Pro" }
         ];
+
+        // --- I18N (Übersetzungen) ---
+        const i18n = {
+            de: { welcome: "Willkommen zurück", email: "E-Mail", password: "Passwort", login: "Einloggen", register: "Neuen Account erstellen", newChat: "+ Neuer Chat", logout: "Abmelden", model1: "KI 1:", model2: "KI 2:", welcomeMsg: "Willkommen! Klic auf 'Neuer Chat'.", settings: "Einstellungen", language: "Sprache", theme: "Design", groupChat: "Gruppen-Chat (2 KIs)", autocomplete: "Auto-Vervollständigung", close: "Schließen" },
+            en: { welcome: "Welcome back", email: "Email", password: "Password", login: "Login", register: "Create new Account", newChat: "+ New Chat", logout: "Logout", model1: "AI 1:", model2: "AI 2:", welcomeMsg: "Welcome! Click 'New Chat' to start.", settings: "Settings", language: "Language", theme: "Theme", groupChat: "Group Chat (2 AIs)", autocomplete: "Auto-Complete", close: "Close" }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'de';
+        let isGroupChat = localStorage.getItem('groupChat') === 'true';
+        let isAutocomplete = localStorage.getItem('autocomplete') !== 'false';
 
         // --- DOM Elements ---
         const authScreen = document.getElementById('auth-screen');
         const appScreen = document.getElementById('app-screen');
         const messagesDiv = document.getElementById('messages');
         const modelSelector = document.getElementById('model-selector');
+        const modelSelector2 = document.getElementById('model-selector-2');
         const chatList = document.getElementById('chat-list');
         const promptInput = document.getElementById('prompt');
+        const ghostPrompt = document.getElementById('ghost-prompt');
         const sendBtn = document.getElementById('send-btn');
+        const settingsModal = document.getElementById('settings-modal');
 
         let currentChatId = null;
         let currentMessages = [];
         let isGenerating = false;
+        let autocompleteTimeout = null;
+        let currentGhostText = '';
 
         // Init Models
         MODELS.forEach(m => {
-            const opt = document.createElement('option');
-            opt.value = m.id; opt.innerText = m.name;
-            modelSelector.appendChild(opt);
+            const opt1 = document.createElement('option'); opt1.value = m.id; opt1.innerText = m.name; modelSelector.appendChild(opt1);
+            const opt2 = document.createElement('option'); opt2.value = m.id; opt2.innerText = m.name; modelSelector2.appendChild(opt2);
         });
+        modelSelector2.value = "gemini-1.5-flash"; // Standard für KI 2
 
-        // Markdown Config
         marked.setOptions({ breaks: true, gfm: true });
 
-        // --- TOAST SYSTEM ---
-        function showToast(message, type = 'error') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerText = message;
-            document.getElementById('toast-container').appendChild(toast);
-            setTimeout(() => toast.remove(), 4000);
+        // --- UI UPDATES (Sprache & Design) ---
+        function applyLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = i18n[currentLang][el.dataset.i18n]; });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = i18n[currentLang][el.dataset.i18nPlaceholder]; });
+        }
+        function applyTheme(theme) { document.body.setAttribute('data-theme', theme); }
+
+        document.getElementById('lang-select').value = currentLang;
+        document.getElementById('group-chat-toggle').checked = isGroupChat;
+        document.getElementById('autocomplete-toggle').checked = isAutocomplete;
+        applyLanguage();
+        document.getElementById('group-2-container').style.display = isGroupChat ? 'flex' : 'none';
+
+        // Event Listeners for Settings
+        document.getElementById('settings-btn').onclick = () => settingsModal.classList.remove('hidden');
+        document.getElementById('modal-close-btn').onclick = () => settingsModal.classList.add('hidden');
+        
+        document.getElementById('lang-select').onchange = (e) => { currentLang = e.target.value; localStorage.setItem('lang', currentLang); applyLanguage(); };
+        document.getElementById('theme-select').onchange = (e) => applyTheme(e.target.value);
+        document.getElementById('group-chat-toggle').onchange = (e) => { isGroupChat = e.target.checked; localStorage.setItem('groupChat', isGroupChat); document.getElementById('group-2-container').style.display = isGroupChat ? 'flex' : 'none'; };
+        document.getElementById('autocomplete-toggle').onchange = (e) => { isAutocomplete = e.target.checked; localStorage.setItem('autocomplete', isAutocomplete); if(!isAutocomplete) ghostPrompt.innerText = ''; };
+
+        // --- TOAST ---
+        function showToast(msg, type = 'error') {
+            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerText = msg;
+            document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 4000);
         }
 
         // --- AUTH LOGIC ---
         document.getElementById('login-btn').onclick = () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(e => showToast(e.message));
+            signInWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-password').value).catch(e => showToast(e.message));
         };
-
         document.getElementById('register-btn').onclick = () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-password').value;
-            createUserWithEmailAndPassword(auth, email, pass).catch(e => showToast(e.message));
+            createUserWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-password').value).catch(e => showToast(e.message));
         };
-
         document.getElementById('logout-btn').onclick = () => signOut(auth);
 
         onAuthStateChanged(auth, user => {
@@ -234,100 +336,104 @@
             const q = query(collection(db, "chats"), where("userId", "==", userId), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 chatList.innerHTML = '';
-                if (snapshot.empty) {
-                    chatList.innerHTML = '<div style="color:#666; font-size:13px; text-align:center; padding:10px;">Noch keine Chats vorhanden</div>';
-                }
                 snapshot.forEach(doc => {
                     const chat = doc.data();
                     const div = document.createElement('div');
                     div.className = 'chat-item';
                     if (doc.id === currentChatId) div.classList.add('active');
-                    div.innerHTML = `<span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${chat.title || 'Neuer Chat'}</span> <button class="del-btn" data-id="${doc.id}">✕</button>`;
+                    div.innerHTML = `<span>${chat.title}</span> <button class="del-btn" data-id="${doc.id}">✕</button>`;
                     div.onclick = (e) => {
                         if (e.target.classList.contains('del-btn')) {
                             deleteDoc(doc(db, "chats", doc.id));
                             if(currentChatId === doc.id) { currentChatId = null; messagesDiv.innerHTML = ''; }
-                        } else {
-                            loadChat(doc.id, chat);
-                        }
+                        } else loadChat(doc.id, chat);
                     };
                     chatList.appendChild(div);
                 });
             });
         }
 
-        function loadChat(id, chatData) {
+        async function loadChat(id, chatData) {
             currentChatId = id;
             currentMessages = chatData.messages || [];
             modelSelector.value = chatData.model || modelSelector.value;
             messagesDiv.innerHTML = '';
-            currentMessages.forEach(m => addMessageUI(m.role, m.content, false));
+            currentMessages.forEach(m => addMessageUI(m.role, m.content, m.model));
         }
 
         document.getElementById('new-chat').onclick = async () => {
-            const user = auth.currentUser;
-            if (!user) return;
-            const docRef = await addDoc(collection(db, "chats"), {
-                title: "Neuer Chat",
-                userId: user.uid,
-                model: modelSelector.value,
-                messages: [],
-                createdAt: serverTimestamp()
-            });
-            currentChatId = docRef.id;
-            currentMessages = [];
-            messagesDiv.innerHTML = '<div class="msg-container"><div class="msg-avatar ai-avatar">L</div><div class="msg-content">Neuer Chat gestartet. Stelle mir eine Frage!</div></div>';
+            const user = auth.currentUser; if (!user) return;
+            const docRef = await addDoc(collection(db, "chats"), { title: "Neuer Chat", userId: user.uid, model: modelSelector.value, messages: [], createdAt: serverTimestamp() });
+            currentChatId = docRef.id; currentMessages = []; messagesDiv.innerHTML = '';
         };
 
-        // --- UI & MESSAGES ---
-        function addMessageUI(role, content, isStreaming = false) {
-            const container = document.createElement('div');
-            container.className = 'msg-container';
-            
+        function addMessageUI(role, content, modelId = null, isStreaming = false) {
+            const container = document.createElement('div'); container.className = 'msg-container';
             const avatar = document.createElement('div');
-            avatar.className = `msg-avatar ${role === 'user' ? 'user-avatar' : 'ai-avatar'}`;
-            avatar.innerText = role === 'user' ? 'U' : 'L';
             
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'msg-content';
+            let avatarClass = 'user-avatar'; let avatarText = 'U';
+            if (role === 'assistant') {
+                avatarClass = (modelId && modelId === modelSelector2.value) ? 'ai-avatar-2' : 'ai-avatar';
+                avatarText = (modelId && modelId === modelSelector2.value) ? 'B' : 'A';
+            }
+            avatar.className = `msg-avatar ${avatarClass}`; avatar.innerText = avatarText;
+            
+            const msgDiv = document.createElement('div'); msgDiv.className = 'msg-content';
             if (isStreaming) msgDiv.classList.add('typing-cursor');
+            msgDiv.innerHTML = role === 'user' ? content : DOMPurify.sanitize(marked.parse(content));
             
-            if (role === 'user') {
-                msgDiv.innerText = content;
-            } else {
-                msgDiv.innerHTML = DOMPurify.sanitize(marked.parse(content));
+            if (role !== 'user') {
                 msgDiv.querySelectorAll('pre code').forEach(block => {
                     hljs.highlightElement(block);
-                    const copyBtn = document.createElement('button');
-                    copyBtn.className = 'copy-code-btn';
-                    copyBtn.innerText = 'Kopieren';
+                    const copyBtn = document.createElement('button'); copyBtn.className = 'copy-code-btn'; copyBtn.innerText = 'Kopieren';
                     copyBtn.onclick = () => { navigator.clipboard.writeText(block.innerText); copyBtn.innerText = 'Kopiert!'; setTimeout(() => copyBtn.innerText = 'Kopieren', 1500); };
                     block.parentNode.appendChild(copyBtn);
                 });
             }
-            
-            container.appendChild(avatar);
-            container.appendChild(msgDiv);
-            messagesDiv.appendChild(container);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            container.appendChild(avatar); container.appendChild(msgDiv);
+            messagesDiv.appendChild(container); messagesDiv.scrollTop = messagesDiv.scrollHeight;
             return msgDiv;
         }
 
-        // --- AUTO RESIZE TEXTAREA ---
+        // --- AUTOCOMPLETE LOGIC (Ghost Text) ---
         promptInput.addEventListener('input', function() {
-            this.style.height = '56px';
-            this.style.height = (this.scrollHeight) + 'px';
+            this.style.height = '56px'; this.style.height = (this.scrollHeight) + 'px';
+            ghostPrompt.innerText = ''; currentGhostText = '';
+            
+            if (!isAutocomplete || this.value.trim().length < 10 || isGenerating) return;
+            
+            clearTimeout(autocompleteTimeout);
+            autocompleteTimeout = setTimeout(async () => {
+                const promptText = this.value;
+                const fastModel = "glm-4-flash"; // Schnelles Modell für Vorschläge
+                try {
+                    const res = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
+                        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEYS.zai}` },
+                        body: JSON.stringify({ model: fastModel, messages: [{ role: "system", content: "Vervollständige den Satz des Nutzers in derselben Sprache. Gib NUR die Fortsetzung, keinen Erklärungstext." }, { role: "user", content: promptText }], max_tokens: 20 })
+                    });
+                    const data = await res.json();
+                    if (data.choices && data.choices[0].message.content) {
+                        currentGhostText = data.choices[0].message.content;
+                        ghostPrompt.innerText = promptText + currentGhostText;
+                    }
+                } catch(e) {}
+            }, 1000); // Warte 1 Sekunde nach dem Tippen
         });
-        
-        // Enter to send, Shift+Enter for newline
+
+        // TAB drücken, um Ghost Text zu übernehmen
         promptInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Tab' && currentGhostText) {
+                e.preventDefault();
+                this.value += currentGhostText;
+                ghostPrompt.innerText = ''; currentGhostText = '';
+                this.style.height = '56px'; this.style.height = (this.scrollHeight) + 'px';
+            } else if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 document.getElementById('prompt-form').dispatchEvent(new Event('submit'));
             }
         });
 
-        // --- API CALL & STREAMING ---
+        // --- CHAT SUBMIT & GROUP CHAT LOGIC ---
         document.getElementById('prompt-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (isGenerating) return;
@@ -335,156 +441,101 @@
             const promptText = promptInput.value.trim();
             if (!promptText) return;
 
-            if (!currentChatId) {
-                await document.getElementById('new-chat').click();
-            }
+            if (!currentChatId) await document.getElementById('new-chat').click();
 
-            isGenerating = true;
-            sendBtn.disabled = true;
-            promptInput.value = '';
-            promptInput.style.height = '56px';
-            
-            if (messagesDiv.querySelector('.typing-cursor') === null && currentMessages.length === 0) {
-                messagesDiv.innerHTML = '';
-            }
+            isGenerating = true; sendBtn.disabled = true;
+            promptInput.value = ''; promptInput.style.height = '56px'; ghostPrompt.innerText = ''; currentGhostText = '';
+            if (currentMessages.length === 0) messagesDiv.innerHTML = '';
 
             addMessageUI('user', promptText);
-            const aiMsgDiv = addMessageUI('assistant', '', true);
-
             const userMsg = { role: 'user', content: promptText };
             currentMessages.push(userMsg);
 
-            const selectedModel = modelSelector.value;
-            let fullAiResponse = '';
+            const model1 = modelSelector.value;
+            const model2 = isGroupChat ? modelSelector2.value : null;
+
+            let chatHistoryForAI2 = [...currentMessages];
 
             try {
-                if (selectedModel.startsWith('gemini')) {
-                    fullAiResponse = await streamGemini(selectedModel, currentMessages, (chunk) => {
-                        aiMsgDiv.innerHTML = DOMPurify.sanitize(marked.parse(chunk));
+                // KI 1 Antwort
+                const ai1Div = addMessageUI('assistant', '', model1, true);
+                const res1 = await streamApiCall(model1, currentMessages, (chunk) => {
+                    ai1Div.innerHTML = DOMPurify.sanitize(marked.parse(chunk));
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                });
+                ai1Div.innerHTML = DOMPurify.sanitize(marked.parse(res1));
+                ai1Div.classList.remove('typing-cursor');
+                ai1Div.querySelectorAll('pre code').forEach(block => { hljs.highlightElement(block); });
+                currentMessages.push({ role: 'assistant', content: res1, model: model1 });
+                chatHistoryForAI2.push({ role: 'assistant', content: res1 });
+
+                // KI 2 Antwort (Gruppen-Chat)
+                if (model2) {
+                    const ai2Div = addMessageUI('assistant', '', model2, true);
+                    const res2 = await streamApiCall(model2, chatHistoryForAI2, (chunk) => {
+                        ai2Div.innerHTML = DOMPurify.sanitize(marked.parse(chunk));
                         messagesDiv.scrollTop = messagesDiv.scrollHeight;
                     });
-                } else if (selectedModel.startsWith('deepseek')) {
-                    fullAiResponse = await streamOpenAICompatible("https://api.deepseek.com/v1/chat/completions", API_KEYS.deepseek, selectedModel, currentMessages, (chunk) => {
-                        aiMsgDiv.innerHTML = DOMPurify.sanitize(marked.parse(chunk));
-                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                    });
-                } else { // Z-AI
-                    fullAiResponse = await streamOpenAICompatible("https://open.bigmodel.cn/api/paas/v4/chat/completions", API_KEYS.zai, selectedModel, currentMessages, (chunk) => {
-                        aiMsgDiv.innerHTML = DOMPurify.sanitize(marked.parse(chunk));
-                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                    });
+                    ai2Div.innerHTML = DOMPurify.sanitize(marked.parse(res2));
+                    ai2Div.classList.remove('typing-cursor');
+                    ai2Div.querySelectorAll('pre code').forEach(block => { hljs.highlightElement(block); });
+                    currentMessages.push({ role: 'assistant', content: res2, model: model2 });
                 }
 
-                aiMsgDiv.innerHTML = DOMPurify.sanitize(marked.parse(fullAiResponse));
-                aiMsgDiv.classList.remove('typing-cursor');
-                aiMsgDiv.querySelectorAll('pre code').forEach(block => {
-                    hljs.highlightElement(block);
-                    const copyBtn = document.createElement('button');
-                    copyBtn.className = 'copy-code-btn';
-                    copyBtn.innerText = 'Kopieren';
-                    copyBtn.onclick = () => { navigator.clipboard.writeText(block.innerText); copyBtn.innerText = 'Kopiert!'; setTimeout(() => copyBtn.innerText = 'Kopieren', 1500); };
-                    block.parentNode.appendChild(copyBtn);
-                });
-
-                currentMessages.push({ role: 'assistant', content: fullAiResponse });
-
+                // Speichern
                 const chatRef = doc(db, "chats", currentChatId);
                 await setDoc(chatRef, {
                     messages: currentMessages,
                     title: currentMessages.length === 1 ? promptText.substring(0, 25) + "..." : undefined,
-                    model: selectedModel
+                    model: model1
                 }, { merge: true });
 
             } catch (error) {
-                aiMsgDiv.classList.remove('typing-cursor');
-                aiMsgDiv.innerHTML = `<span style="color:var(--danger);">Fehler: ${error.message}</span>`;
-                showToast("API Fehler: " + error.message);
+                showToast("Fehler: " + error.message);
             } finally {
-                isGenerating = false;
-                sendBtn.disabled = false;
+                isGenerating = false; sendBtn.disabled = false;
             }
         });
 
-        // OpenAI Compatible (DeepSeek & Z-AI)
-        async function streamOpenAICompatible(url, apiKey, model, messages, onChunk) {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-                body: JSON.stringify({ model, messages, stream: true })
-            });
-
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let fullText = '';
-            let buffer = '';
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop();
-
-                for (const line of lines) {
-                    if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-                        try {
-                            const json = JSON.parse(line.slice(6));
-                            const content = json.choices[0]?.delta?.content || '';
-                            if (content) {
-                                fullText += content;
-                                onChunk(fullText);
-                            }
-                        } catch (e) {}
-                    }
-                }
-            }
-            return fullText;
+        // --- API STREAMING ROUTER ---
+        async function streamApiCall(model, messages, onChunk) {
+            if (model.startsWith('gemini')) return streamGemini(model, messages, onChunk);
+            else if (model.startsWith('deepseek')) return streamOpenAICompatible("https://api.deepseek.com/v1/chat/completions", API_KEYS.deepseek, model, messages, onChunk);
+            else return streamOpenAICompatible("https://open.bigmodel.cn/api/paas/v4/chat/completions", API_KEYS.zai, model, messages, onChunk);
         }
 
-        // Gemini API (Optimized with alt=sse for stable streaming)
-        async function streamGemini(model, messages, onChunk) {
-            const contents = messages.map(m => ({
-                role: m.role === 'user' ? 'user' : 'model',
-                parts: [{ text: m.content }]
-            }));
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${API_KEYS.gemini}`;
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents })
-            });
-
-            if (!response.ok) throw new Error(`Gemini HTTP ${response.status}`);
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let fullText = '';
-            let buffer = '';
-
+        async function streamOpenAICompatible(url, apiKey, model, messages, onChunk) {
+            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` }, body: JSON.stringify({ model, messages, stream: true }) });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const reader = res.body.getReader(); const decoder = new TextDecoder();
+            let fullText = ''; let buffer = '';
             while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop();
-
+                const { done, value } = await reader.read(); if (done) break;
+                buffer += decoder.decode(value, { stream: true }); const lines = buffer.split('\n'); buffer = lines.pop();
                 for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        try {
-                            const json = JSON.parse(line.slice(6));
-                            const text = json.candidates[0]?.content?.parts[0]?.text || '';
-                            if (text) {
-                                fullText += text;
-                                onChunk(fullText);
-                            }
-                        } catch (e) {}
+                    if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+                        try { const json = JSON.parse(line.slice(6)); const c = json.choices[0]?.delta?.content || ''; if (c) { fullText += c; onChunk(fullText); } } catch (e) {}
                     }
                 }
-            }
-            return fullText;
+            } return fullText;
+        }
+
+        async function streamGemini(model, messages, onChunk) {
+            const contents = messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] }));
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${API_KEYS.gemini}`;
+            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents }) });
+            if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
+            const reader = res.body.getReader(); const decoder = new TextDecoder();
+            let fullText = ''; let buffer = '';
+            while (true) {
+                const { done, value } = await reader.read(); if (done) break;
+                buffer += decoder.decode(value, { stream: true }); const lines = buffer.split('\n'); buffer = lines.pop();
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        try { const json = JSON.parse(line.slice(6)); const t = json.candidates[0]?.content?.parts[0]?.text || ''; if (t) { fullText += t; onChunk(fullText); } } catch (e) {}
+                    }
+                }
+            } return fullText;
         }
     </script>
 </body>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LobiBrot AI - Ultimate Hub</title>
     
-    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -34,7 +33,6 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
 
-        /* AUTH */
         #auth-screen { display: flex; align-items: center; justify-content: center; width: 100%; background: var(--bg); flex-direction: column; gap: 20px; }
         .auth-logo { font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
         .auth-box { background: var(--chat-bubble); padding: 40px; border-radius: 16px; width: 380px; border: 1px solid var(--border); }
@@ -44,7 +42,6 @@
         .btn-primary { background: var(--accent); color: white; }
         .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
 
-        /* LAYOUT */
         #app-screen { display: flex; width: 100%; height: 100vh; overflow: hidden; }
         #sidebar { width: 300px; background: var(--sidebar); padding: 15px; display: flex; flex-direction: column; border-right: 1px solid var(--border); flex-shrink: 0; }
         #sidebar-header { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -57,7 +54,6 @@
         .del-btn { opacity: 0; color: var(--danger); background: none; border: none; cursor: pointer; font-size: 14px; }
         #chat-list .chat-item:hover .del-btn { opacity: 1; }
         
-        /* SIDEBAR SETTINGS */
         .setting-card { background: var(--chat-bubble); border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .setting-card label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--text); }
         .setting-card select, .setting-card input[type="text"], .setting-card input[type="color"] { width: 100%; padding: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 6px; margin-bottom: 10px; }
@@ -71,7 +67,6 @@
         #user-info { margin-top: auto; font-size: 13px; color: #888; padding-top: 15px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         #logout-btn { color: var(--danger); cursor: pointer; background: none; border: none; font-size: 13px; }
 
-        /* MAIN FIXIERTES LAYOUT */
         #main { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg); height: 100vh; overflow: hidden; }
         #header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; flex-wrap: wrap; flex-shrink: 0; }
         .model-group { display: flex; align-items: center; gap: 5px; background: var(--chat-bubble); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border); }
@@ -93,8 +88,7 @@
         .typing-cursor::after { content: '▋'; animation: blink 1s infinite; color: var(--accent); }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* EINGABEFELD - JETZT IMMER SICHTBAR UND ERWEITERT */
-        #input-area { padding: 20px; border-top: 1px solid var(--border); position: relative; background: var(--bg); flex-shrink: 0; }
+        #input-area { padding: 20px; border-top: 1px solid var(--border); position: relative; background: var(--bg); flex-shrink: 0; display: block !important; }
         #prompt-form { max-width: 800px; margin: 0 auto; position: relative; }
         .ghost-wrapper { position: relative; width: 100%; }
         #ghost-prompt { position: absolute; top: 0; left: 0; width: 100%; height: 56px; padding: 15px 60px 15px 15px; border-radius: 12px; border: 1px solid transparent; color: var(--ghost-text); pointer-events: none; font-size: 15px; line-height: 1.5; white-space: pre-wrap; overflow: hidden; z-index: 1; background: transparent; }
@@ -103,7 +97,6 @@
         #send-btn { position: absolute; right: 10px; bottom: 10px; background: var(--accent); border: none; color: white; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; z-index: 3; display: flex; align-items: center; justify-content: center; }
         #send-btn svg { width: 18px; height: 18px; fill: white; }
 
-        /* NEUE FEATURES STYLES */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: var(--sidebar); padding: 30px; border-radius: 16px; width: 400px; border: 1px solid var(--border); position: relative; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text); }
@@ -123,29 +116,24 @@
         .action-btn { background: transparent; border: 1px solid var(--border); color: #888; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
         .action-btn:hover { color: var(--accent); border-color: var(--accent); }
 
-        /* REACTIONS */
         .reactions { display: flex; gap: 5px; margin-top: 8px; }
         .reaction-btn { background: var(--chat-bubble); border: 1px solid var(--border); border-radius: 12px; padding: 2px 8px; font-size: 12px; cursor: pointer; }
         .reaction-btn.active { background: var(--accent); color: white; }
 
-        /* ATTACHMENTS */
         .attachment-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
         .attachment-item { background: var(--chat-bubble); padding: 5px 10px; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
         .remove-attachment { cursor: pointer; color: var(--danger); }
 
-        /* PROFILE MODAL ENHANCED */
         .avatar-preview { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; }
         .avatar-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
         .avatar-option { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
         .avatar-option:hover { transform: scale(1.1); }
 
-        /* CUSTOM THEME EDITOR */
         .theme-editor { margin-top: 20px; }
         .color-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .color-row label { flex: 1; font-size: 13px; }
         .color-row input { width: 80px; }
 
-        /* MOBILE RESPONSIVE */
         @media (max-width: 768px) {
             #sidebar { width: 250px; }
             #header { flex-wrap: wrap; }
@@ -153,13 +141,14 @@
             .msg-avatar { width: 32px; height: 32px; font-size: 14px; }
         }
 
-        /* NOTIFICATIONS */
-        #notification-sound { display: none; }
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; }
+        .toast { padding: 12px 20px; border-radius: 8px; color: white; font-size: 14px; margin-bottom: 10px; }
+        .toast.error { background: var(--danger); }
+        .toast.success { background: var(--accent); }
     </style>
 </head>
 <body>
 
-    <!-- AUTH SCREEN -->
     <div id="auth-screen">
         <div class="auth-logo">LobiBrot AI</div>
         <div class="auth-box">
@@ -171,32 +160,24 @@
         </div>
     </div>
 
-    <!-- PROFILE MODAL -->
     <div id="profile-modal" class="modal hidden">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h2>Mein Profil</h2>
             <div class="modal-body">
                 <div class="avatar-preview" id="avatar-preview">U</div>
-                
                 <label>Anzeigename</label>
                 <input type="text" id="profile-name-input" placeholder="Dein Name">
-                
                 <label>Bio</label>
                 <textarea id="profile-bio-input" placeholder="Erzähle etwas über dich..." rows="2"></textarea>
-                
                 <label>Status</label>
                 <select id="profile-status-select">
                     <option value="online">Online</option>
                     <option value="busy">beschäftigt</option>
                     <option value="away">abwesend</option>
                 </select>
-                
                 <label>Avatar auswählen</label>
-                <div class="avatar-options" id="avatar-options">
-                    <!-- Dynamisch generiert -->
-                </div>
-                
+                <div class="avatar-options" id="avatar-options"></div>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <span class="stat-number" id="stat-chats">0</span>
@@ -207,28 +188,23 @@
                         <span class="stat-label">Nachrichten</span>
                     </div>
                 </div>
-                
                 <button class="btn-primary" id="save-profile-btn">Speichern</button>
             </div>
         </div>
     </div>
 
-    <!-- APP SCREEN -->
     <div id="app-screen" class="hidden">
         <div id="sidebar">
             <div id="sidebar-header">
                 <button id="new-chat" data-i18n="newChat">+ Neuer Chat</button>
                 <button id="settings-btn">⚙️</button>
             </div>
-            
             <div id="chat-view" class="sidebar-view">
                 <input type="text" id="search-chats" placeholder="Chats durchsuchen..." class="search-input">
                 <div id="chat-list"></div>
             </div>
-
             <div id="settings-view" class="sidebar-view hidden">
                 <button class="back-btn" id="back-btn">← Zurück zu Chats</button>
-                
                 <div class="setting-card">
                     <label data-i18n="language">Sprache</label>
                     <select id="lang-select">
@@ -236,7 +212,6 @@
                         <option value="en">English</option>
                     </select>
                 </div>
-
                 <div class="setting-card">
                     <label data-i18n="theme">Design</label>
                     <select id="theme-select">
@@ -246,7 +221,6 @@
                         <option value="custom">Benutzerdefiniert</option>
                     </select>
                 </div>
-
                 <div class="setting-card theme-editor hidden" id="custom-theme-editor">
                     <label>Benutzerdefiniertes Design</label>
                     <div class="color-row">
@@ -262,7 +236,6 @@
                         <input type="color" id="accent-color" value="#10a37f">
                     </div>
                 </div>
-
                 <div class="setting-card">
                     <label data-i18n="groupChat">Gruppen-Chat (2 KIs)</label>
                     <label class="switch">
@@ -270,7 +243,6 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-
                 <div class="setting-card">
                     <label data-i18n="autocomplete">Auto-Vervollständigung</label>
                     <label class="switch">
@@ -278,22 +250,12 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-
-                <div class="setting-card">
-                    <label>Benachrichtigungston</label>
-                    <label class="switch">
-                        <input type="checkbox" id="sound-toggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
             </div>
-
             <div id="user-info">
                 <span id="user-email"></span>
                 <button id="logout-btn" data-i18n="logout">Abmelden</button>
             </div>
         </div>
-        
         <div id="main">
             <div id="header">
                 <button id="profile-btn" class="icon-btn" title="Profil">👤</button>
@@ -310,14 +272,12 @@
                     <button id="clear-chat-btn" class="icon-btn" title="Chat leeren">🗑️</button>
                 </div>
             </div>
-            
             <div id="messages">
                 <div class="msg-container">
                     <div class="msg-avatar ai-avatar">L</div>
                     <div class="msg-content" data-i18n="welcomeMsg">Willkommen! Klicke auf "Neuer Chat", um zu starten.</div>
                 </div>
             </div>
-            
             <div id="input-area">
                 <div class="attachment-bar" id="attachment-bar"></div>
                 <form id="prompt-form">
@@ -329,26 +289,17 @@
                         </button>
                     </div>
                 </form>
-                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: var(--ghost-text);">
-                    <div>
-                        <button id="voice-btn" class="icon-btn" style="width: 30px; height: 30px; font-size: 14px;">🎤</button>
-                        <button id="attach-btn" class="icon-btn" style="width: 30px; height: 30px; font-size: 14px;">📎</button>
-                    </div>
-                    <div>Strg+Enter für neue Zeile</div>
-                </div>
             </div>
         </div>
     </div>
 
     <div id="toast-container"></div>
-    <audio id="notification-sound" src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"></audio>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, deleteDoc, orderBy, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, deleteDoc, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-        // --- FIREBASE KONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyChghSVtI1VoH7hbRXzOrGrG3e1QO3Ira4",
             authDomain: "lobibrot-ai.firebaseapp.com",
@@ -362,14 +313,19 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- API KEYS ---
+        // KORRIGIERTE API URLs
+        const API_ENDPOINTS = {
+            deepseek: "https://api.deepseek.com/chat/completions",
+            zai: "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+            gemini: "https://generativelanguage.googleapis.com/v1beta/models"
+        };
+
         const API_KEYS = {
             zai: "d3ea951dde414d4caf3448863886f1c1.fa3WMIABIZRCggcS",
             deepseek: "sk-f8f3a64c5c1945a1986c6038022e2154",
             gemini: "AQ.Ab8RN6Jcl4xXOeKazg2vRk28MARIAfdB4vVl9JFQokWxFXrlkQ"
         };
 
-        // --- KI PERSÖNLICHKEITEN ---
         const AI_PERSONALITIES = {
             "deepseek-chat": { name: "DeepSeek V3", avatar: "🧠", color: "#4F46E5" },
             "deepseek-reasoner": { name: "DeepSeek R1", avatar: "🧮", color: "#7C3AED" },
@@ -382,14 +338,18 @@
             "gemini-pro": { name: "Gemini", avatar: "🔮", color: "#0C4A6E" }
         };
 
-        // --- 50+ MODELS ---
         const MODELS = [
-            { id: "deepseek-chat", name: "DeepSeek V3" }, { id: "deepseek-reasoner", name: "DeepSeek R1" }, { id: "deepseek-coder", name: "DeepSeek Coder" },
-            { id: "glm-4-plus", name: "Z AI - GLM-4 Plus" }, { id: "glm-4", name: "Z AI - GLM-4" }, { id: "glm-4-flash", name: "Z AI - GLM-4 Flash (Free)" },
-            { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro" }, { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash" }, { id: "gemini-pro", name: "Gemini Pro" }
+            { id: "deepseek-chat", name: "DeepSeek V3" },
+            { id: "deepseek-reasoner", name: "DeepSeek R1" },
+            { id: "deepseek-coder", name: "DeepSeek Coder" },
+            { id: "glm-4-plus", name: "Z AI - GLM-4 Plus" },
+            { id: "glm-4", name: "Z AI - GLM-4" },
+            { id: "glm-4-flash", name: "Z AI - GLM-4 Flash (Free)" },
+            { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro" },
+            { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash" },
+            { id: "gemini-pro", name: "Gemini Pro" }
         ];
 
-        // --- I18N ---
         const i18n = {
             de: { welcome: "Willkommen zurück", email: "E-Mail", password: "Passwort", login: "Einloggen", register: "Neuen Account erstellen", newChat: "+ Neuer Chat", logout: "Abmelden", model1: "KI 1:", model2: "KI 2:", welcomeMsg: "Willkommen! Klicke auf 'Neuer Chat', um zu starten.", language: "Sprache", theme: "Design", groupChat: "Gruppen-Chat (2 KIs)", autocomplete: "Auto-Vervollständigung" },
             en: { welcome: "Welcome back", email: "Email", password: "Password", login: "Login", register: "Create new Account", newChat: "+ New Chat", logout: "Logout", model1: "AI 1:", model2: "AI 2:", welcomeMsg: "Welcome! Click 'New Chat' to start.", language: "Language", theme: "Theme", groupChat: "Group Chat (2 AIs)", autocomplete: "Auto-Complete" }
@@ -398,10 +358,8 @@
         let currentLang = localStorage.getItem('lang') || 'de';
         let isGroupChat = localStorage.getItem('groupChat') === 'true';
         let isAutocomplete = localStorage.getItem('autocomplete') !== 'false';
-        let isSoundEnabled = localStorage.getItem('soundEnabled') !== 'false';
         let customTheme = JSON.parse(localStorage.getItem('customTheme')) || { bg: '#0f0f0f', text: '#ececec', accent: '#10a37f' };
         
-        // --- PROFILE DATA ---
         let profileData = JSON.parse(localStorage.getItem('profileData')) || {
             displayName: 'User',
             bio: '',
@@ -412,7 +370,6 @@
             totalChats: 0
         };
 
-        // --- DOM Elements ---
         const authScreen = document.getElementById('auth-screen');
         const appScreen = document.getElementById('app-screen');
         const messagesDiv = document.getElementById('messages');
@@ -433,7 +390,6 @@
         let currentGhostText = '';
         let attachments = [];
 
-        // Initialize Models
         MODELS.forEach(m => {
             const opt1 = document.createElement('option'); opt1.value = m.id; opt1.innerText = m.name; modelSelector.appendChild(opt1);
             const opt2 = document.createElement('option'); opt2.value = m.id; opt2.innerText = m.name; modelSelector2.appendChild(opt2);
@@ -459,11 +415,9 @@
         document.getElementById('lang-select').value = currentLang;
         document.getElementById('group-chat-toggle').checked = isGroupChat;
         document.getElementById('autocomplete-toggle').checked = isAutocomplete;
-        document.getElementById('sound-toggle').checked = isSoundEnabled;
         applyLanguage();
         document.getElementById('group-2-container').style.display = isGroupChat ? 'flex' : 'none';
 
-        // Theme change listener
         document.getElementById('theme-select').onchange = (e) => {
             const theme = e.target.value;
             if (theme === 'custom') {
@@ -475,7 +429,6 @@
             localStorage.setItem('theme', theme);
         };
 
-        // Custom theme inputs
         document.getElementById('bg-color').value = customTheme.bg;
         document.getElementById('text-color').value = customTheme.text;
         document.getElementById('accent-color').value = customTheme.accent;
@@ -502,9 +455,7 @@
         document.getElementById('lang-select').onchange = (e) => { currentLang = e.target.value; localStorage.setItem('lang', currentLang); applyLanguage(); };
         document.getElementById('group-chat-toggle').onchange = (e) => { isGroupChat = e.target.checked; localStorage.setItem('groupChat', isGroupChat); document.getElementById('group-2-container').style.display = isGroupChat ? 'flex' : 'none'; };
         document.getElementById('autocomplete-toggle').onchange = (e) => { isAutocomplete = e.target.checked; localStorage.setItem('autocomplete', isAutocomplete); if(!isAutocomplete) ghostPrompt.innerText = ''; };
-        document.getElementById('sound-toggle').onchange = (e) => { isSoundEnabled = e.target.checked; localStorage.setItem('soundEnabled', isSoundEnabled); };
 
-        // --- AVATAR OPTIONS ---
         const AVATAR_OPTIONS = ['👤', '👨', '👩', '🧑', '👶', '👴', '👵', '👽', '🤖', '👻', '👾', '🐶', '🐱', '🦊', '🐼', '🦁'];
         const avatarOptionsContainer = document.getElementById('avatar-options');
         AVATAR_OPTIONS.forEach(avatar => {
@@ -525,7 +476,6 @@
             preview.style.background = profileData.avatarColor;
         }
 
-        // --- PROFILE LOGIC ---
         function openProfileModal() {
             document.getElementById('profile-modal').classList.remove('hidden');
             document.getElementById('profile-name-input').value = profileData.displayName;
@@ -558,7 +508,6 @@
         document.querySelector('.close-modal').onclick = closeProfileModal;
         document.getElementById('save-profile-btn').onclick = saveProfile;
 
-        // --- SEARCH LOGIC ---
         document.getElementById('search-chats').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             document.querySelectorAll('#chat-list .chat-item').forEach(item => {
@@ -567,7 +516,6 @@
             });
         });
 
-        // --- EXPORT & CLEAR LOGIC ---
         document.getElementById('export-btn').onclick = () => {
             if (!currentChatId || currentMessages.length === 0) { showToast('Kein Chat zum Exportieren!', 'error'); return; }
             let markdown = `# Chat Export\n\n`;
@@ -592,58 +540,11 @@
             showToast('Chat geleert!', 'success');
         };
 
-        // --- ATTACHMENTS ---
-        document.getElementById('attach-btn').onclick = () => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.multiple = true;
-            input.onchange = (e) => {
-                for (let file of e.target.files) {
-                    if (file.size > 5 * 1024 * 1024) {
-                        showToast('Datei zu groß! Max. 5MB', 'error');
-                        continue;
-                    }
-                    attachments.push({ name: file.name, size: file.size, type: file.type });
-                    renderAttachments();
-                }
-            };
-            input.click();
-        };
-
-        function renderAttachments() {
-            attachmentBar.innerHTML = '';
-            attachments.forEach((att, index) => {
-                const div = document.createElement('div');
-                div.className = 'attachment-item';
-                div.innerHTML = `
-                    <i class="fas fa-paperclip"></i>
-                    ${att.name} (${(att.size / 1024).toFixed(1)} KB)
-                    <span class="remove-attachment" data-index="${index}">×</span>
-                `;
-                div.querySelector('.remove-attachment').onclick = () => {
-                    attachments.splice(index, 1);
-                    renderAttachments();
-                };
-                attachmentBar.appendChild(div);
-            });
-        }
-
-        // --- VOICE RECORDING SIMULATION ---
-        document.getElementById('voice-btn').onclick = () => {
-            showToast('Sprachaufnahme simuliert! (In Entwicklung)', 'success');
-            // In einer echten App würdest du hier MediaRecorder verwenden
-        };
-
-        // --- TOAST ---
         function showToast(msg, type = 'error') {
             const t = document.createElement('div'); t.className = `toast ${type}`; t.innerText = msg;
             document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 4000);
-            if (isSoundEnabled && type === 'success') {
-                document.getElementById('notification-sound').play().catch(e => console.log("Audio play failed:", e));
-            }
         }
 
-        // --- AUTH LOGIC ---
         document.getElementById('login-btn').onclick = () => {
             signInWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-password').value).catch(e => showToast(e.message));
         };
@@ -667,7 +568,6 @@
             }
         });
 
-        // --- FIRESTORE CHAT LOGIC ---
         function listenToChats(userId) {
             const q = query(collection(db, "chats"), where("userId", "==", userId), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -696,7 +596,6 @@
             modelSelector.value = chatData.model || modelSelector.value;
             messagesDiv.innerHTML = '';
             currentMessages.forEach(m => addMessageUI(m.role, m.content, m.model));
-            // Ensure input area is visible
             document.getElementById('input-area').style.display = 'block';
         }
 
@@ -714,7 +613,6 @@
             messagesDiv.innerHTML = '';
             profileData.totalChats++;
             localStorage.setItem('profileData', JSON.stringify(profileData));
-            // Ensure input area is visible
             document.getElementById('input-area').style.display = 'block';
         };
 
@@ -750,7 +648,6 @@
                 btn.className = 'reaction-btn';
                 btn.innerText = emoji;
                 btn.onclick = () => {
-                    // In einer echten App würdest du hier die Reaktion speichern
                     btn.classList.toggle('active');
                 };
                 reactionsDiv.appendChild(btn);
@@ -804,7 +701,6 @@
             return msgDiv;
         }
 
-        // --- AUTOCOMPLETE LOGIC ---
         promptInput.addEventListener('input', function() {
             this.style.height = '56px'; this.style.height = (this.scrollHeight) + 'px';
             ghostPrompt.innerText = ''; currentGhostText = '';
@@ -815,7 +711,7 @@
             autocompleteTimeout = setTimeout(async () => {
                 const promptText = this.value;
                 try {
-                    const res = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
+                    const res = await fetch(API_ENDPOINTS.zai, {
                         method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEYS.zai}` },
                         body: JSON.stringify({ model: "glm-4-flash", messages: [{ role: "system", content: "Vervollständige den Satz. NUR Fortsetzung." }, { role: "user", content: promptText }], max_tokens: 20 })
                     });
@@ -840,7 +736,6 @@
             }
         });
 
-        // --- CHAT SUBMIT ---
         document.getElementById('prompt-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (isGenerating) return;
@@ -856,7 +751,7 @@
             if (currentMessages.length === 0) messagesDiv.innerHTML = '';
 
             addMessageUI('user', promptText);
-            const userMsg = { role: 'user', content: promptText, attachments: attachments.map(a => ({ name: a.name, size: a.size })) };
+            const userMsg = { role: 'user', content: promptText };
             currentMessages.push(userMsg);
             
             profileData.totalMessages++;
@@ -903,12 +798,12 @@
 
             } catch (error) {
                 showToast("Fehler: " + error.message);
+                console.error('API Error:', error);
             } finally {
                 isGenerating = false; sendBtn.disabled = false;
             }
         });
 
-        // --- REGENERATE LOGIC ---
         async function regenerateResponse(messageId) {
             if (isGenerating) return;
             let lastUserMsgIndex = -1;
@@ -917,7 +812,6 @@
             }
             if (lastUserMsgIndex === -1) return;
             
-            // Remove last assistant message(s)
             if (currentMessages[currentMessages.length - 1].role === 'assistant') {
                 currentMessages.pop();
                 const containers = messagesDiv.querySelectorAll('.msg-container');
@@ -971,45 +865,123 @@
             }
         }
 
-        // --- API CALLS ---
+        function renderAttachments() {
+            attachmentBar.innerHTML = '';
+            attachments.forEach((att, index) => {
+                const div = document.createElement('div');
+                div.className = 'attachment-item';
+                div.innerHTML = `📎 ${att.name} <span class="remove-attachment" data-index="${index}">×</span>`;
+                div.querySelector('.remove-attachment').onclick = () => {
+                    attachments.splice(index, 1);
+                    renderAttachments();
+                };
+                attachmentBar.appendChild(div);
+            });
+        }
+
         async function streamApiCall(model, messages, onChunk) {
-            if (model.startsWith('gemini')) return streamGemini(model, messages, onChunk);
-            else if (model.startsWith('deepseek')) return streamOpenAICompatible("https://api.deepseek.com/v1/chat/completions", API_KEYS.deepseek, model, messages, onChunk);
-            else return streamOpenAICompatible("https://open.bigmodel.cn/api/paas/v4/chat/completions", API_KEYS.zai, model, messages, onChunk);
+            try {
+                if (model.startsWith('gemini')) return await streamGemini(model, messages, onChunk);
+                else if (model.startsWith('deepseek')) return await streamOpenAICompatible(API_ENDPOINTS.deepseek, API_KEYS.deepseek, model, messages, onChunk);
+                else return await streamOpenAICompatible(API_ENDPOINTS.zai, API_KEYS.zai, model, messages, onChunk);
+            } catch (error) {
+                console.error('Stream API Error:', error);
+                throw error;
+            }
         }
 
         async function streamOpenAICompatible(url, apiKey, model, messages, onChunk) {
-            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` }, body: JSON.stringify({ model, messages, stream: true }) });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const reader = res.body.getReader(); const decoder = new TextDecoder();
-            let fullText = ''; let buffer = '';
+            console.log('Calling API:', url, 'Model:', model);
+            const res = await fetch(url, { 
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${apiKey}` 
+                }, 
+                body: JSON.stringify({ model, messages, stream: true }) 
+            });
+            
+            if (!res.ok) {
+                const errorText = await res.text();
+                console.error('API Response:', errorText);
+                throw new Error(`HTTP ${res.status}: ${errorText}`);
+            }
+            
+            const reader = res.body.getReader(); 
+            const decoder = new TextDecoder();
+            let fullText = ''; 
+            let buffer = '';
+            
             while (true) {
-                const { done, value } = await reader.read(); if (done) break;
-                buffer += decoder.decode(value, { stream: true }); const lines = buffer.split('\n'); buffer = lines.pop();
+                const { done, value } = await reader.read(); 
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true }); 
+                const lines = buffer.split('\n'); 
+                buffer = lines.pop();
+                
                 for (const line of lines) {
                     if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-                        try { const json = JSON.parse(line.slice(6)); const c = json.choices[0]?.delta?.content || ''; if (c) { fullText += c; onChunk(fullText); } } catch (e) {}
+                        try { 
+                            const json = JSON.parse(line.slice(6)); 
+                            const c = json.choices[0]?.delta?.content || ''; 
+                            if (c) { 
+                                fullText += c; 
+                                onChunk(fullText); 
+                            } 
+                        } catch (e) {
+                            console.error('Parse error:', e);
+                        }
                     }
                 }
-            } return fullText;
+            } 
+            return fullText;
         }
 
         async function streamGemini(model, messages, onChunk) {
             const contents = messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] }));
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${API_KEYS.gemini}`;
-            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents }) });
-            if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
-            const reader = res.body.getReader(); const decoder = new TextDecoder();
-            let fullText = ''; let buffer = '';
+            const url = `${API_ENDPOINTS.gemini}/${model}:streamGenerateContent?alt=sse&key=${API_KEYS.gemini}`;
+            console.log('Calling Gemini:', url);
+            
+            const res = await fetch(url, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ contents }) 
+            });
+            
+            if (!res.ok) {
+                const errorText = await res.text();
+                console.error('Gemini Response:', errorText);
+                throw new Error(`Gemini HTTP ${res.status}: ${errorText}`);
+            }
+            
+            const reader = res.body.getReader(); 
+            const decoder = new TextDecoder();
+            let fullText = ''; 
+            let buffer = '';
+            
             while (true) {
-                const { done, value } = await reader.read(); if (done) break;
-                buffer += decoder.decode(value, { stream: true }); const lines = buffer.split('\n'); buffer = lines.pop();
+                const { done, value } = await reader.read(); 
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true }); 
+                const lines = buffer.split('\n'); 
+                buffer = lines.pop();
+                
                 for (const line of lines) {
                     if (line.startsWith('data: ')) {
-                        try { const json = JSON.parse(line.slice(6)); const t = json.candidates[0]?.content?.parts[0]?.text || ''; if (t) { fullText += t; onChunk(fullText); } } catch (e) {}
+                        try { 
+                            const json = JSON.parse(line.slice(6)); 
+                            const t = json.candidates[0]?.content?.parts[0]?.text || ''; 
+                            if (t) { 
+                                fullText += t; 
+                                onChunk(fullText); 
+                            } 
+                        } catch (e) {
+                            console.error('Gemini parse error:', e);
+                        }
                     }
                 }
-            } return fullText;
+            } 
+            return fullText;
         }
     </script>
 </body>
